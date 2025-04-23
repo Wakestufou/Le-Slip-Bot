@@ -24,7 +24,7 @@ const event: Event = {
     type: Events.ClientReady,
     function: (readyClient: Client<true>) => {
         console.log(new Date())
-        cron.schedule('0 07 17 * * *', () => {
+        cron.schedule('0 0 0 * * *', () => {
             console.log("Début de la cron")
             if (!isItCiottiDay()) {
                 return;
