@@ -52,5 +52,6 @@ Ajouter dans le dossier `events` un fichier avec un `export default` de type `Ev
 ### Tester en exécutant le typescript directement
 
 - `npm i` -> Installation des dépendances
-- `npm run dev-deploy-commands` -> Permet de mettre à jour les (/) commands coté discord
-- `npm run dev` -> Permet d'éxecuter le programme classiquement avec typescript
+- `npm run build` -> Compile le typescript en javascript
+- `npm run deploy-commands -- DEV` -> Permet de mettre à jour les (/) commands coté discord de dev
+- `npm run deploy-commands -- DELETE` -> Permet de supprimés les (/) commands coté discord de dev

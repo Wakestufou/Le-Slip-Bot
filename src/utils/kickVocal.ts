@@ -42,9 +42,11 @@ export function kickVocal(guild: Guild) {
             console.error("Erreur sur la connexion :", err);
         });
 
+        /* J'ai comment car ça spam trop
         connection.on("stateChange", (oldState, newState) => {
             console.log(`Connexion vocale : ${oldState.status} → ${newState.status}`);
         });
+        */
 
         try {
             await entersState(connection, VoiceConnectionStatus.Ready, 5000);

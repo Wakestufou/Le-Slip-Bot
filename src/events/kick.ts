@@ -23,16 +23,17 @@ const event: Event = {
     once: true,
     type: Events.ClientReady,
     function: (readyClient: Client<true>) => {
-        console.log(new Date())
         cron.schedule('0 0 0 * * *', () => {
             console.log("Début de la cron")
             if (!isItCiottiDay()) {
+                console.log("Ah c'est un jour chill !")
                 return;
             }
             
             console.log("Au revoir les petits")
-            // @ts-ignore
-            kickVocal(readyClient.guilds.cache.get(process.env.GUILD_ID as string));
+            readyClient.guilds.cache.forEach(guild => {
+                kickVocal(guild);
+            })
         })
     }
 }

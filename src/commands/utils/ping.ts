@@ -7,7 +7,6 @@ const command: SlashCommand = {
         .setName("ping")
         .setDescription('Replies with Pong!'),
     async execute(interaction: ChatInputCommandInteraction) {
-        console.log("test")
         await interaction.reply("Pong !");
     }
 }
