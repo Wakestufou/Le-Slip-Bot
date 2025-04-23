@@ -12,9 +12,12 @@
 	},
 	"license": "ISC",
 	"author": "",
-	"type": "commonjs",
+	"type": "module",
 	"main": "index.js",
 	"scripts": {
+		"dev": "ts-node ./src/index.ts",
+		"dev-deploy-commands": "ts-node ./src/deploy-commands.ts",
+		"deploy-commands": "node ./dist/deploy-commands.js",
 		"build": "tsc",
 		"start": "node ./dist/index.js"
 	},
@@ -27,6 +30,7 @@
 	"devDependencies": {
 		"@eslint/js": "^9.23.0",
 		"eslint": "^9.23.0",
-		"tsx": "^4.19.3"
+		"tsx": "^4.19.3",
+		"ts-node": "^10.9.2"
 	}
 }
