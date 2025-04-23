@@ -1,6 +1,6 @@
 import { SlashCommandBuilder } from "discord.js";
 import { ChatInputCommandInteraction } from "discord.js";
-import type { SlashCommand } from "../../type/SlashCommand";
+import type { SlashCommand } from "../../type/SlashCommand.js";
 
 const command: SlashCommand = {
     data: new SlashCommandBuilder()

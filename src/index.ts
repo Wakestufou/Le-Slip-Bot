@@ -2,11 +2,11 @@ import fs from "fs";
 import path from "path";
 import { fileURLToPath } from 'url';
 import { Client, Collection, GatewayIntentBits } from "discord.js";
-import type { Event } from "./type/Event";
+import type { Event } from "./type/Event.js";
 import 'dotenv/config';
 
 
-const client = new Client({ intents: [GatewayIntentBits.Guilds] });
+const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
 
 // ---------- Commands -----------------------------------------------------------------------
 client.commands = new Collection();
