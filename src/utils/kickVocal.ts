@@ -1,67 +1,97 @@
-import { AudioPlayerStatus, createAudioPlayer, createAudioResource, joinVoiceChannel } from "@discordjs/voice";
-import { fileURLToPath } from 'url';
+import {
+    joinVoiceChannel,
+    createAudioPlayer,
+    createAudioResource,
+    AudioPlayerStatus,
+    entersState,
+    VoiceConnectionStatus,
+    VoiceConnection
+} from "@discordjs/voice";
+import { Guild, ChannelType, Collection, GuildMember } from "discord.js";
 import path from "path";
-import { ChannelType, Collection, Guild, GuildMember } from "discord.js";
+import { fileURLToPath } from "url";
 
 export function kickVocal(guild: Guild) {
     const player = createAudioPlayer();
-    console.log("Player")
-
-    // @ts-ignore
-    let connection = null;
-    let i = 1;
-
-    function sendAudio(channelId: string) {
-        console.log("joined")
-        connection = joinVoiceChannel({
-            // @ts-ignore
-            channelId: channelId,
-            // @ts-ignore
-            guildId: guild.id,
-            // @ts-ignore
-            adapterCreator: guild.voiceAdapterCreator
-        });
-
-        console.log("Before sound")
-        const sound = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../audio/nuit2.mp3");
-        console.log("After sound")
-        const resource = createAudioResource(sound, {
-            inlineVolume: true
-        });
-        console.log("After resource")
-
-        player.play(resource);
-        connection.subscribe(player);
-        console.log("start")
-    }
+    let connection: VoiceConnection | null = null;
 
     const voiceChannels = guild.channels.cache.filter(channel => channel.type === ChannelType.GuildVoice);
+    const voiceChannelsArray = Array.from(voiceChannels.values());
 
-    if (voiceChannels.size === 0) {
+    const soundPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../audio/nuit2.mp3");
+
+    if (voiceChannelsArray.length === 0) {
+        console.log("Aucun salon vocal trouvé.");
         return;
     }
 
-    const voiceChannelsArray = Array.from(voiceChannels.values());
+    let currentIndex = 0;
 
-    sendAudio(voiceChannelsArray[0].id);
-
-    player.on(AudioPlayerStatus.Idle, () => {
-        // @ts-ignore
-        if (connection) {
+    async function switchToChannel(channelId: string) {
+        if (connection && connection.state.status !== VoiceConnectionStatus.Destroyed) {
             connection.destroy();
-            console.log("detroy");
-            (voiceChannelsArray[i - 1].members as Collection<string, GuildMember>).forEach(member => {
+        }
+
+        connection = joinVoiceChannel({
+            channelId,
+            guildId: guild.id,
+            adapterCreator: guild.voiceAdapterCreator,
+        });
+
+        connection.on("error", (err) => {
+            console.error("Erreur sur la connexion :", err);
+        });
+
+        connection.on("stateChange", (oldState, newState) => {
+            console.log(`Connexion vocale : ${oldState.status} → ${newState.status}`);
+        });
+
+        try {
+            await entersState(connection, VoiceConnectionStatus.Ready, 5000);
+            console.log(`Connecté au salon ${channelId}`);
+        } catch (err) {
+            console.error("Échec de la connexion vocale :", err);
+            connection.destroy();
+            connection = null;
+        }
+    }
+
+    async function playNext() {
+        if (currentIndex >= voiceChannelsArray.length) {
+            console.log("Fini !");
+            return;
+        }
+
+        const channel = voiceChannelsArray[currentIndex];
+        await switchToChannel(channel.id);
+
+        if (!connection) {
+            currentIndex++;
+            playNext(); // sauter au suivant si la connexion a échoué
+            return;
+        }
+
+        const resource = createAudioResource(soundPath, { inlineVolume: true });
+        player.play(resource);
+        connection.subscribe(player);
+
+        console.log(`Lecture dans ${channel.name}`);
+
+        player.once(AudioPlayerStatus.Idle, () => {
+            console.log("Lecture terminée, déconnexion...");
+            connection?.destroy();
+
+            // Déconnecter les membres
+            (channel.members as Collection<string, GuildMember>).forEach(member => {
                 if (member.voice.channel) {
                     member.voice.disconnect();
                 }
             });
-        }
 
-        if (voiceChannels.size > i) {
-            // @ts-ignore
-            sendAudio(voiceChannelsArray[i].id);
-            i++;
-        }
-        console.log('Lecture terminée et déconnexion.');
-    });
+            currentIndex++;
+            setTimeout(() => playNext(), 500); // Petite pause avant de passer au suivant
+        });
+    }
+
+    playNext();
 }
