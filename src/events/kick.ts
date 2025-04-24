@@ -9,11 +9,9 @@ function isItCiottiDay() {
 
     // Obtenir la date de demain
     const today = new Date();
-    const tomorrow = new Date(today);
-    tomorrow.setDate(today.getDate() + 1);
 
-    const dayOfWeek = tomorrow.getDay(); // 0 = dimanche, 6 = samedi
-    const isHoliday = hd.isHoliday(tomorrow);
+    const dayOfWeek = today.getDay(); // 0 = dimanche, 6 = samedi
+    const isHoliday = hd.isHoliday(today);
     const isWeekExcluded = dayOfWeek === 5 || dayOfWeek === 6; // vendredi = 5, samedi = 6
 
     return !(isHoliday || isWeekExcluded);
