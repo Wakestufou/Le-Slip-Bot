@@ -1,0 +1,26 @@
+FROM node:23-bookworm
+
+ENV TZ=Europe/Paris
+
+# Dépendances système
+RUN apt-get update && apt-get install -y \
+  build-essential \
+  python3 \
+  pkg-config \
+  libc6-dev \
+  && rm -rf /var/lib/apt/lists/*
+
+# Installer nodemon et ts-node globalement si nécessaire
+RUN npm install -g nodemon ts-node typescript
+
+WORKDIR /bot
+
+COPY package*.json ./
+
+RUN npm install
+
+COPY . .
+
+EXPOSE 3000
+
+CMD ["npm", "run", "dev"]

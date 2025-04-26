@@ -12,7 +12,7 @@ RUN apt-get update && apt-get install -y \
   && rm -rf /var/lib/apt/lists/*
 
 # Créer un dossier de travail
-WORKDIR /slip-bot
+WORKDIR /bot
 
 # Copier uniquement les fichiers nécessaires au début pour profiter du cache Docker
 COPY package*.json ./

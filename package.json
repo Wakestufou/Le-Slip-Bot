@@ -6,7 +6,7 @@
   "scripts": {
     "lint": "eslint 'src/**/*.ts' --fix",
     "format": "prettier --write 'src/**/*.ts'",
-    "dev": "nodemon --files src/index.ts",
+    "dev": "nodemon",
     "dev-deploy-commands": "ts-node ./src/deploy-commands.ts",
     "deploy-commands": "node ./dist/deploy-commands.js",
     "build": "tsc",

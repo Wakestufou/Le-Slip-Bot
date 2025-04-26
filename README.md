@@ -4,12 +4,16 @@
 
 ### Mise en production
 
+Vous pouvez juste exécuter le script `start-prod.sh`
+
 - `npm i` -> Installation des dépendances
 - `npm run build` -> Compile le typescript en javascript
 - `npm run deploy-commands` -> Permet de mettre à jour les (/) commands coté discord
 - `npm start` -> Lance le bot
 
 ### Tester en exécutant le typescript directement
+
+Vous pouvez juste exécuter le script `start-dev.sh`
 
 - `npm i` -> Installation des dépendances
 - `npm run dev` -> exécute le typescript en rechargement automatiquement lorsque vous mettez à jour un fichier .ts
