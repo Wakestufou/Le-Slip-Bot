@@ -1,0 +1,39 @@
+{
+  "compilerOptions": {
+    "target": "ES2022", // Code moderne avec support async/await, etc.
+    "module": "CommonJS", // Node utilise encore majoritairement CommonJS
+    "moduleResolution": "Node", // Pour résoudre les imports comme Node
+    "esModuleInterop": true, // Pour importer proprement les modules CommonJS (ex: discord.js)
+    "forceConsistentCasingInFileNames": true,
+    "strict": true, // Typage strict
+    "skipLibCheck": true, // Ignore les types de node_modules
+    "outDir": "./dist", // Où mettre les .js compilés
+    "rootDir": "./src", // Point d'entrée de ton code source
+    "resolveJsonModule": true, // Permet d'importer des JSON
+    "noImplicitAny": true, // Force à bien typer tout
+    "types": [
+      "node"
+    ], // Charge les types de Node.js
+    "allowJs": false, // Tu peux mettre true si tu mélanges JS et TS
+    "noEmitOnError": true, // Évite d'émettre si erreurs TypeScript
+    "paths": {
+      "*": [
+        "./node_modules/*",
+        "./src/types/*"
+      ]
+    }
+  },
+  "include": [
+    "src/**/*.ts",
+    "src/types/*",
+    "types/discord.d.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "src/types/**/*"
+  ],
+  "ts-node": {
+    "files": true
+  },
+}

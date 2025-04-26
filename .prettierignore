@@ -1,0 +1,27 @@
+# Ignore les fichiers/dossiers compilés
+dist
+build
+
+# Node modules
+node_modules
+
+# Lockfiles (facultatif mais propre)
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# Fichiers de logs
+*.log
+
+# Fichiers d'environnement
+.env
+.env.local
+.env.*.local
+
+# Configuration Vite, Webpack, etc (optionnel selon ton projet)
+vite.config.ts
+vite.config.js
+webpack.config.js
+
+# Git
+.git
