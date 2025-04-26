@@ -29,5 +29,7 @@ RUN npm run build
 # Vérification de la timezone
 RUN echo "Timezone: $TZ" && date
 
+RUN chmod +x ./start.sh
+
 # Lancer l'app
-CMD ["npm", "start"]
+CMD ["./start.sh"]
