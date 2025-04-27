@@ -1,5 +1,5 @@
-import { ChatInputCommandInteraction, Client, Events, MessageFlags } from "discord.js";
-import type { Event } from "../type/Event.js";
+import { ChatInputCommandInteraction, Events, MessageFlags } from 'discord.js';
+import { Event } from '../types/Event';
 
 const event: Event = {
     once: false,
@@ -16,18 +16,22 @@ const event: Event = {
 
         try {
             await command.execute(interaction);
-        }
-        catch (error) {
+        } catch (error) {
             console.error(error);
 
             if (interaction.replied || interaction.deferred) {
-                await interaction.followUp({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
-            }
-            else {
-                await interaction.reply({ content: 'There was an error while executing this command!', flags: MessageFlags.Ephemeral });
+                await interaction.followUp({
+                    content: 'There was an error while executing this command!',
+                    flags: MessageFlags.Ephemeral,
+                });
+            } else {
+                await interaction.reply({
+                    content: 'There was an error while executing this command!',
+                    flags: MessageFlags.Ephemeral,
+                });
             }
         }
-    }
-}
+    },
+};
 
 export default event;

@@ -5,23 +5,24 @@ import {
     AudioPlayerStatus,
     entersState,
     VoiceConnectionStatus,
-    VoiceConnection
-} from "@discordjs/voice";
-import { Guild, ChannelType, Collection, GuildMember } from "discord.js";
-import path from "path";
-import { fileURLToPath } from "url";
+    VoiceConnection,
+} from '@discordjs/voice';
+import { Guild, ChannelType, Collection, GuildMember } from 'discord.js';
+import path from 'path';
 
 export function kickVocal(guild: Guild) {
     const player = createAudioPlayer();
     let connection: VoiceConnection | null = null;
 
-    const voiceChannels = guild.channels.cache.filter(channel => channel.type === ChannelType.GuildVoice);
+    const voiceChannels = guild.channels.cache.filter(
+        (channel) => channel.type === ChannelType.GuildVoice
+    );
     const voiceChannelsArray = Array.from(voiceChannels.values());
 
-    const soundPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "../../audio/nuit2.mp3");
+    const soundPath = path.join(__dirname, '../../audio/nuit2.mp3');
 
     if (voiceChannelsArray.length === 0) {
-        console.log("Aucun salon vocal trouvé.");
+        console.log('Aucun salon vocal trouvé.');
         return;
     }
 
@@ -38,8 +39,8 @@ export function kickVocal(guild: Guild) {
             adapterCreator: guild.voiceAdapterCreator,
         });
 
-        connection.on("error", (err) => {
-            console.error("Erreur sur la connexion :", err);
+        connection.on('error', (err) => {
+            console.error('Erreur sur la connexion :', err);
         });
 
         /* J'ai comment car ça spam trop
@@ -52,7 +53,7 @@ export function kickVocal(guild: Guild) {
             await entersState(connection, VoiceConnectionStatus.Ready, 5000);
             console.log(`Connecté au salon ${channelId}`);
         } catch (err) {
-            console.error("Échec de la connexion vocale :", err);
+            console.error('Échec de la connexion vocale :', err);
             connection.destroy();
             connection = null;
         }
@@ -60,7 +61,7 @@ export function kickVocal(guild: Guild) {
 
     async function playNext() {
         if (currentIndex >= voiceChannelsArray.length) {
-            console.log("Fini !");
+            console.log('Fini !');
             return;
         }
 
@@ -80,11 +81,11 @@ export function kickVocal(guild: Guild) {
         console.log(`Lecture dans ${channel.name}`);
 
         player.once(AudioPlayerStatus.Idle, () => {
-            console.log("Lecture terminée, déconnexion...");
+            console.log('Lecture terminée, déconnexion...');
             connection?.destroy();
 
             // Déconnecter les membres
-            (channel.members as Collection<string, GuildMember>).forEach(member => {
+            (channel.members as Collection<string, GuildMember>).forEach((member) => {
                 if (member.voice.channel) {
                     member.voice.disconnect();
                 }

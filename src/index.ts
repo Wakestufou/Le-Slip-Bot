@@ -1,49 +1,52 @@
-import fs from "fs";
-import path from "path";
-import { fileURLToPath } from 'url';
-import { Client, Collection, GatewayIntentBits } from "discord.js";
-import type { Event } from "./type/Event.js";
+import { Client, Collection, GatewayIntentBits } from 'discord.js';
+import fs from 'fs';
+import path from 'path';
+import { Event } from './types/Event';
 import 'dotenv/config';
 
-
-const client = new Client({ intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates] });
+const client = new Client({
+    intents: [GatewayIntentBits.Guilds, GatewayIntentBits.GuildVoiceStates],
+});
 
 // ---------- Commands -----------------------------------------------------------------------
 client.commands = new Collection();
 
-
-const foldersPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "commands");
+const foldersPath = path.join(__dirname, 'commands');
 const commandFolder = fs.readdirSync(foldersPath);
 
 for (const folder of commandFolder) {
     const commandsPath = path.join(foldersPath, folder);
-    const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.ts') || file.endsWith('.js'));
+    const commandFiles = fs
+        .readdirSync(commandsPath)
+        .filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
 
     for (const file of commandFiles) {
         const filePath = path.join(commandsPath, file);
-        const command = (await import(filePath)).default;
+        const command = require(filePath).default;
 
         if ('data' in command && 'execute' in command) {
             client.commands.set(command.data.name, command);
-        }
-        else {
-            console.log(`[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`);
+        } else {
+            console.log(
+                `[WARNING] The command at ${filePath} is missing a required "data" or "execute" property.`
+            );
         }
     }
 }
 
 // ---------- Events -----------------------------------------------------------------------
-const eventsPath = path.join(path.dirname(fileURLToPath(import.meta.url)), "events");
-const eventFolder = fs.readdirSync(eventsPath).filter(file => file.endsWith('.ts') || file.endsWith('.js'));
+const eventsPath = path.join(__dirname, 'events');
+const eventFolder = fs
+    .readdirSync(eventsPath)
+    .filter((file) => file.endsWith('.ts') || file.endsWith('.js'));
 
 for (const eventFile of eventFolder) {
     const eventPath = path.join(eventsPath, eventFile);
-    const event = (await import(eventPath)).default as Event;
+    const event = require(eventPath).default as Event;
 
     if (event.once) {
         client.once(event.type, event.function);
-    }
-    else {
+    } else {
         client.on(event.type, event.function);
     }
 }
