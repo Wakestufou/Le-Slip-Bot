@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Définir le nom du conteneur et de l'image dans des variables
-CONTAINER_NAME="bot-prod"
-IMAGE_NAME="bot-prod"
+CONTAINER_NAME="slipbot"
+IMAGE_NAME="slipbot"
 
 # Demander si l'on veut rebuild l'image
 read -p "Voulez-vous reconstruire l'image de production ? (y/n): " rebuild
