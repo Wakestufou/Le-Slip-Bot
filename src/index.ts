@@ -7,7 +7,7 @@ import 'dotenv/config';
 console.log('Lancement du bot...');
 console.log('Vérification de la BDD...');
 
-const filePath = path.join(__dirname, '..', 'bdd.json');
+const filePath = path.join(__dirname, '..', 'database', 'bdd.json');
 
 if (!fs.existsSync(filePath)) {
     console.error(

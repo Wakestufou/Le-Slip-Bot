@@ -3,7 +3,7 @@ import fs from 'fs';
 import { IBDD } from '../types/Bdd';
 import { User } from 'discord.js';
 
-const filePath = path.join(__dirname, '..', '..', 'bdd.json');
+const filePath = path.join(__dirname, '..', '..', 'database', 'bdd.json');
 
 function loadDatabase(): IBDD {
     const data = fs.readFileSync(filePath, 'utf-8');
